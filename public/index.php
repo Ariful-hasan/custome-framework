@@ -2,16 +2,14 @@
 
 declare(strict_types = 1);
 
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
-
-
 use App\Http\Controllers\BaseController;
 
 require_once __DIR__ . '/../vendor/autoload.php';
-// echo __DIR__ . '/../';
+
+$dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->safeLoad();
 
 phpinfo();
 
-$hello = new BaseController();
-echo $hello->hello();
+// $hello = new BaseController();
+// echo $hello->hello();

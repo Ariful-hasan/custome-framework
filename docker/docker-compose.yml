@@ -40,11 +40,13 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
       - ./mysql-config.cnf:/etc/mysql/conf.d/config.cnf
+    env_file:
+      - ../.env
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: testp
-      MYSQL_USER: php_mvc
-      MYSQL_PASSWORD: php_mvc
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     depends_on:
       - app
     networks:
