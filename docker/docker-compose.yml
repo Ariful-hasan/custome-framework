@@ -1,0 +1,59 @@
+version: '3.9'
+
+services:
+
+  #Nginx Service
+  web:
+    image: nginx:alpine
+    container_name: demo-nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 8000:80
+      - 443:443
+    volumes:
+      - ../:/var/www
+      - ./nginx:/etc/nginx/conf.d
+    networks:
+      - demo-network
+
+  #PHP Service
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: demo-app
+    restart: unless-stopped
+    tty: true
+    working_dir: /var/www/
+    volumes:
+      - ../:/var/www
+    networks:
+      - demo-network
+
+  #MySQL Service 
+  db:
+    image: mysql:8
+    container_name: demo-db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql-config.cnf:/etc/mysql/conf.d/config.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: testp
+      MYSQL_USER: php_mvc
+      MYSQL_PASSWORD: php_mvc
+    depends_on:
+      - app
+    networks:
+      - demo-network
+
+networks:
+  demo-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local
