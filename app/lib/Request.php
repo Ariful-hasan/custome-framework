@@ -56,4 +56,32 @@ class Request
     {
         return $this->routeParams[$param] ?? $default;
     }
+
+    /**
+     * @param $params
+     * @return self
+     */
+    public function setRouteParams($params)
+    {
+        $this->routeParams = $params;
+        return $this;
+    }
+
+    public function only(array $keys): array
+    {
+        return array_filter(
+            $this->getBody(),
+            static fn (string $key) => in_array($key, $keys, true),
+            ARRAY_FILTER_USE_KEY
+        );
+    }
+
+    public function except(array $keys): array
+    {
+        return array_filter(
+            $this->getBody(),
+            static fn (string $key) => !in_array($key, $keys, true),
+            ARRAY_FILTER_USE_KEY
+        );
+    }
 }
